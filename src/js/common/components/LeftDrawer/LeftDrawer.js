@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
-import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
@@ -9,65 +8,100 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
+import Collapse from '@material-ui/core/Collapse'
+import { ExpandLess, ExpandMore, StarBorder } from '@material-ui/icons'
+import ClickAwayListener from '@material-ui/core/ClickAwayListener'
+import { browserHistory } from 'react-router';
+import AddPropertyDialog from '../dialogs/AddPropertyDialog'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   list: {
     width: 250,
   },
   fullList: {
     width: 'auto',
   },
-});
+  nested: {
+    paddingLeft: theme.spacing(4),
+  },
+}));
 
-export default function SwipeableTemporaryDrawer() {
+export default function SwipeableTemporaryDrawer(props) {
+  const { navDrawerOpen, handleChangeRequestNavDrawer, handleOpen } = props;
+
   const classes = useStyles();
-  const [state, setState] = React.useState({
-    left: false,
+
+  const [state, setState] = useState({
+    open: false,
+    openProperties: false,
+    openProspects: false,
+    addDialog: false,
   });
 
-  const toggleDrawer = (side, open) => (event) => {
+  const toggleDrawer = (toggle) => (event) => {
     if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
       return;
     }
-
-    setState({ ...state, [side]: open });
+    setState({ ...state, open: toggle });
   };
 
-  const sideList = (side) => (
-    <div
-      className={classes.list}
-      role="presentation"
-      onClick={toggleDrawer(side, false)}
-      onKeyDown={toggleDrawer(side, false)}
-    >
+  function handleClick() {
+    setState({ ...state, openProspects: !state.openProspects });
+  }
+
+  function handleClickAway() {
+    console.log('AWAY')
+    setState({ ...state, open: false });
+  }
+
+  const sideList = () => (
+    <ClickAwayListener onClickAway={handleClickAway}>
       <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
+        <ListItem button key="My Properties">
+          <ListItemIcon>
+            <InboxIcon />
+          </ListItemIcon>
+          <ListItemText primary="My Properties" />
+        </ListItem>
+        <Divider />
+        <ListItem button onClick={handleClick}>
+          <ListItemIcon>
+            <MailIcon />
+          </ListItemIcon>
+          <ListItemText primary="My Prospects" />
+          {state.openProspects ? <ExpandLess /> : <ExpandMore />}
+        </ListItem>
+        <div
+          className={classes.list}
+          role="presentation"
+          onClick={handleChangeRequestNavDrawer}
+          onKeyDown={toggleDrawer(false)}
+        >
+          <Collapse in={state.openProspects} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <ListItem button className={classes.nested} key={1} onClick={handleOpen}>
+                <ListItemIcon>
+                  <StarBorder />
+                </ListItemIcon>
+                <ListItemText primary="Add Property" />
+              </ListItem>
+            </List>
+
+          </Collapse>
+        </div>
+
       </List>
-      <Divider />
-      <List>
-        {['All mail', 'Trash', 'Spam'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List>
-    </div>
+    </ClickAwayListener>
   );
 
   return (
     <div>
-      <Button onClick={toggleDrawer('left', true)}>Open Left</Button>
       <SwipeableDrawer
-        onClose={toggleDrawer('left', false)}
-        onOpen={toggleDrawer('left', true)}
+        open={navDrawerOpen}
+        onClose={toggleDrawer('open', false)}
+        onOpen={toggleDrawer('open', true)}
       >
-        {sideList('left')}
+        {sideList()}
       </SwipeableDrawer>
     </div>
   );

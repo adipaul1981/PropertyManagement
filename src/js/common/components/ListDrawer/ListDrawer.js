@@ -8,7 +8,7 @@ import Business from 'material-ui/svg-icons/communication/business';
 import Folder from 'material-ui/svg-icons/file/folder';
 import { cyanA200, yellowA200 } from 'material-ui/styles/colors';
 import { browserHistory } from 'react-router';
-/*import DialogAddProperty from '../dialogs/DialogAddProperty';*/
+/* import DialogAddProperty from '../dialogs/DialogAddProperty'; */
 
 export default class ListDrawer extends React.Component {
   constructor(props) {
@@ -95,7 +95,9 @@ export default class ListDrawer extends React.Component {
             ]}
           />
         </List>
-        /*<DialogAddProperty open={this.state.addDialog} handleClose={this.handleClose} handleSubmit={this.handleSubmit} />*/
+        /*
+        <DialogAddProperty open={this.state.addDialog} handleClose={this.handleClose} handleSubmit={this.handleSubmit} />
+*/
       </div>
 
     );
