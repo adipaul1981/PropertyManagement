@@ -95,11 +95,11 @@ class ButtonAppBar extends Component {
           handleChangeRequestNavDrawer={this.handleChangeRequestNavDrawer}
           handleOpen={this.handleOpen}
         />
-        {/*<AddPropertyDialog*/}
-        {/*  addPropertyDialog={this.state.addPropertyDialog}*/}
-        {/*  handleClose={this.handleClose}*/}
-        {/*  handleSubmit={this.handleSubmit}*/}
-        {/*/>*/}
+        <AddPropertyDialog
+          addPropertyDialog={this.state.addPropertyDialog}
+          handleClose={this.handleClose}
+          handleSubmit={this.handleSubmit}
+        />
       </div>
     );
   }
