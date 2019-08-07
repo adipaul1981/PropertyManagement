@@ -1,0 +1,16 @@
+/*
+// This file is just an example, please delete assets/fonts/YourFavoriteFont when you install
+// You probably need a different fonts for your site :)
+//
+// And in order to setup ultimate and correct font-faces, please use the following link
+// https://css-tricks.com/snippets/css/using-font-face/
+//
+// The font-face here is just to show the setup is working
+*/
+
+@font-face {
+  font-family: "Roboto-thin";
+  src: url("../assets/fonts/Roboto-Thin.ttf") format("embedded-opentype");
+  font-weight: normal;
+  font-style: normal;
+}
